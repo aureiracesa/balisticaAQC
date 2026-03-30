@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tabla Balística Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f3;--sf:#fff;--sf2:#f0efe9;--bd:rgba(0,0,0,.10);--bd2:rgba(0,0,0,.18);--tx:#1a1917;--tx2:#6b6860;--tx3:#9c9a94;--bl:#1a5fa8;--or:#c44a1a;--gr:#1a7a50;--re:#a32d2d;--ibg:#e8f0f9;--itx:#0d3d6e;--rmd:8px;--rlg:12px;--mono:'DM Mono',monospace}
+@media(prefers-color-scheme:dark){:root{--bg:#171614;--sf:#1f1e1b;--sf2:#2a2926;--bd:rgba(255,255,255,.09);--bd2:rgba(255,255,255,.16);--tx:#edecea;--tx2:#9c9a94;--tx3:#5a5852;--bl:#5b9fe8;--or:#e87a50;--gr:#4dc48a;--re:#e87070;--ibg:#0d2140;--itx:#7ab8f5}}
+@media print{.noprint{display:none!important}body{background:#fff;color:#000;font-size:11px}.shell{max-width:100%;padding:.5rem}.tabs{display:none}.panel{display:block!important}.card,.tbl-wrap,.cchart,.wind-card,.mpbr-card,.zt-wrap{border:1px solid #ccc!important;break-inside:avoid;margin-bottom:.5rem}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5;min-height:100vh}
+.shell{max-width:1000px;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;border-bottom:.5px solid var(--bd2);padding-bottom:1rem;flex-wrap:wrap;gap:10px}
+.topbar h1{font-size:20px;font-weight:500;letter-spacing:-.02em}
+.topbar sub{font-size:11px;color:var(--tx3);font-family:var(--mono);display:block;margin-top:2px}
+.btn{padding:7px 16px;font-size:12px;font-weight:500;font-family:inherit;background:var(--sf);border:.5px solid var(--bd2);border-radius:var(--rmd);color:var(--tx2);cursor:pointer;transition:all .15s}
+.btn:hover{background:var(--sf2);color:var(--tx)}
+.tabs{display:flex;gap:2px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:7px 13px;font-size:13px;font-weight:400;color:var(--tx2);cursor:pointer;border:.5px solid transparent;border-radius:var(--rmd);background:none;transition:all .15s;font-family:inherit}
+.tab:hover{background:var(--sf2);color:var(--tx)}
+.tab.active{background:var(--sf);border-color:var(--bd2);color:var(--tx);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.sec{margin-bottom:1.5rem}
+.sl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--tx3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sl::after{content:'';flex:1;height:.5px;background:var(--bd)}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.g5{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.card{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.125rem}
+.field label{display:block;font-size:11px;color:var(--tx2);margin-bottom:5px}
+.field select,.field input[type=text],.field input[type=number]{width:100%;font-size:13px;font-family:inherit;background:var(--sf2);border:.5px solid var(--bd);border-radius:var(--rmd);padding:7px 10px;color:var(--tx);outline:none;-webkit-appearance:none;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6860' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.sw{margin-top:4px}.sr{display:flex;align-items:center;gap:8px}
+.sr input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:2px;background:var(--bd2);outline:none;cursor:pointer}
+.sr input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--sf);border:2px solid var(--tx2);cursor:pointer}
+.sv{font-size:12px;font-weight:500;font-family:var(--mono);min-width:60px;text-align:right;color:var(--tx)}
+.csec{margin-top:10px;padding:12px;border-radius:var(--rmd);background:var(--sf2);border:.5px dashed var(--bd2)}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:1.25rem}
+.m{background:var(--sf2);border-radius:var(--rmd);padding:.75rem 1rem}
+.m .ml{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.m .mv{font-size:20px;font-weight:500;font-family:var(--mono);color:var(--tx);line-height:1}
+.m .mu{font-size:11px;color:var(--tx2);margin-top:2px}
+.cchart{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:1rem}
+.lgd{display:flex;gap:18px;margin-bottom:10px;flex-wrap:wrap}
+.lgd span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--tx2)}
+.ldot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.tbl-wrap{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);overflow:auto;margin-bottom:1rem}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{padding:9px 9px;text-align:right;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--tx3);background:var(--sf2);border-bottom:.5px solid var(--bd);white-space:nowrap;font-family:var(--mono)}
+th:first-child{text-align:left}
+td{padding:7px 9px;text-align:right;border-bottom:.5px solid var(--bd);color:var(--tx);font-family:var(--mono);font-size:12px}
+td:first-child{text-align:left;font-weight:500;font-family:'DM Sans',sans-serif;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr.zrow td{background:var(--ibg);color:var(--itx)}
+tr:hover:not(.zrow) td{background:var(--sf2)}
+.note{font-size:11px;color:var(--tx3);padding:.5rem 0;font-family:var(--mono)}
+.help{font-size:12px;color:var(--tx2);background:var(--sf2);border-radius:var(--rmd);padding:.75rem 1rem;margin-top:.75rem;line-height:1.6}
+.help b{font-weight:500;color:var(--tx)}
+.wind-card{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:1rem;overflow:auto}
+.wt{border-collapse:collapse;font-size:11px;font-family:var(--mono);white-space:nowrap;width:100%}
+.wt th{padding:6px 10px;text-align:center;font-size:10px;font-weight:500;color:var(--tx3);background:var(--sf2);border:.5px solid var(--bd)}
+.wt td{padding:6px 10px;text-align:center;border:.5px solid var(--bd);font-size:11px}
+.wt .rh{text-align:left;font-weight:500;color:var(--tx2);background:var(--sf2)}
+.wc1{color:#1a7a50}.wc2{color:#ba7517}.wc3{color:#c44a1a}.wc4{color:#a32d2d}
+.mpbr-card{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:1rem}
+.mst{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:12px}
+.ms{background:var(--sf2);border-radius:var(--rmd);padding:.75rem 1rem}
+.ms .msl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.ms .msv{font-size:18px;font-weight:500;font-family:var(--mono);color:var(--tx)}
+.ms .msu{font-size:11px;color:var(--tx2)}
+.mbar{position:relative;height:28px;background:var(--sf2);border-radius:6px;overflow:hidden;margin-top:14px}
+.mbf{position:absolute;left:0;top:0;height:100%;border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:500;font-family:var(--mono);color:#fff;transition:width .4s}
+.mbl{display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);font-family:var(--mono);margin-top:3px}
+/* zeroing */
+.zt-wrap{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem}
+.zt-body{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap;margin-top:1.25rem}
+.zt-svg{flex-shrink:0;text-align:center}
+.zt-panel{flex:1;min-width:220px}
+.rbox{background:var(--sf2);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:10px}
+.rbox .rbl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.rrow{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:.5px solid var(--bd)}
+.rrow:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.rrow .rk{font-size:13px;color:var(--tx2)}
+.rrow .rv{font-size:16px;font-weight:500;font-family:var(--mono);color:var(--tx)}
+.rrow .ru{font-size:11px;color:var(--tx3);margin-left:3px}
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.bup{background:#e8f0f9;color:#0d3d6e}.bdn{background:#fef3e2;color:#7a4800}
+.blf{background:#f3e8f9;color:#5a1a7a}.brt{background:#e8f4ee;color:#0f4530}
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin-bottom:1rem}
+/* rifle selector cards */
+.rifle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1rem}
+.rifle-card{background:var(--sf);border:.5px solid var(--bd);border-radius:var(--rlg);padding:.85rem 1rem;cursor:pointer;transition:all .15s}
+.rifle-card:hover{border-color:var(--bd2)}
+.rifle-card.active{border-color:var(--bl);background:var(--ibg)}
+.rifle-card .rn{font-size:13px;font-weight:500;color:var(--tx);margin-bottom:3px}
+.rifle-card .rd{font-size:11px;color:var(--tx2)}
+.rifle-card .rc{font-size:10px;color:var(--tx3);font-family:var(--mono);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="topbar noprint">
+  <div><h1>Tabla Balística Pro</h1><sub>Motor Siacci G1/G7 · 0–800 m · Caza mayor</sub></div>
+  <button class="btn noprint" onclick="window.print()">Imprimir / PDF</button>
+</div>
+<div class="tabs noprint">
+  <button class="tab active" onclick="setTab(this,'cfg')">Configuración</button>
+  <button class="tab" onclick="setTab(this,'cond')">Condiciones</button>
+  <button class="tab" onclick="setTab(this,'res')">Tabla y gráfico</button>
+  <button class="tab" onclick="setTab(this,'wind')">Viento cruzado</button>
+  <button class="tab" onclick="setTab(this,'mpbr')">MPBR</button>
+  <button class="tab" onclick="setTab(this,'zero')">Puesta a tiro</button>
+</div>
+
+<!-- ═══ CONFIG ═══ -->
+<div id="tab-cfg" class="panel active">
+
+  <div class="sec"><div class="sl">Mis rifles</div>
+    <div class="rifle-grid">
+      <div class="rifle-card active" id="rc0" onclick="loadPreset(0)">
+        <div class="rn">Manchlicher 300 WM</div>
+        <div class="rd">Sako Super Hammerhead 180gr · S&B 2.5-10x56</div>
+        <div class="rc">BC G1 0.390 · 880 m/s · SH 42 mm</div>
+      </div>
+      <div class="rifle-card" id="rc1" onclick="loadPreset(1)">
+        <div class="rn">Santa Barbara 308 Win</div>
+        <div class="rd">Sako GameHead Pro 165gr · Delta Titanium 4-24x50 MIL</div>
+        <div class="rc">BC G1 0.507 · 815 m/s · SH 44 mm</div>
+      </div>
+      <div class="rifle-card" id="rc2" onclick="loadPreset(2)">
+        <div class="rn">Savage 17 HMR</div>
+        <div class="rd">Remington AccuTip-V 20gr · Visor 2.5-10x50 MOA</div>
+        <div class="rc">BC G1 0.185 · 724 m/s · SH 32 mm</div>
+      </div>
+      <div class="rifle-card" id="rc3" onclick="loadPreset(3)">
+        <div class="rn">Tikka T3X Roughtech 6.5 PRC</div>
+        <div class="rd">Sako GameHead Pro 140gr · Leica PRS 5-30x56</div>
+        <div class="rc">BC G1 0.563 · 900 m/s · SH 50 mm</div>
+      </div>
+      <div class="rifle-card" id="rc4" onclick="loadPreset(4)">
+        <div class="rn">Remington Alaskan Ti 270 WSM</div>
+        <div class="rd">Norma TipStrike 140gr · Swarovski Z6i 5-30x50</div>
+        <div class="rc">BC G1 0.326 · 950 m/s · SH 44 mm · 0.5cm/clic</div>
+      </div>
+    </div>
+    <div class="help">Selecciona uno de tus rifles para cargarlo automáticamente, o configura un rifle personalizado abajo.</div>
+  </div>
+
+  <div class="sec"><div class="sl">Rifle y cañón</div>
+    <div class="card g2">
+      <div class="field"><label>Nombre / descripción</label><input type="text" id="rifleName" value="Manchlicher 300 WM" onchange="calc()"></div>
+      <div class="field"><label>Longitud de cañón (mm)</label>
+        <div class="sw"><div class="sr"><input type="range" id="brlS" min="300" max="700" step="10" value="560" oninput="sv(this,'brlV')"><span class="sv" id="brlV">560 mm</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sl">Munición — calibre · fabricante · carga</div>
+    <div class="card">
+      <div class="g3" style="margin-bottom:10px">
+        <div class="field"><label>Calibre</label>
+          <select id="calS" onchange="onCal()">
+            <optgroup label="Rimfire"><option value="17hmr">.17 HMR</option></optgroup>
+            <optgroup label="6mm"><option value="243w">243 Winchester</option><option value="6mmcr">6mm Creedmoor</option></optgroup>
+            <optgroup label="6.5mm"><option value="65cr">6.5 Creedmoor</option><option value="65prc">6.5 PRC</option><option value="264wm">264 Win Mag</option></optgroup>
+            <optgroup label="7mm"><option value="7rm">7mm Rem Mag</option><option value="7wsm">7mm WSM</option><option value="7x64">7×64 Brenneke</option><option value="7x57">7×57 Mauser</option></optgroup>
+            <optgroup label=".270/.280"><option value="270w">270 Winchester</option><option value="270wsm">270 WSM</option><option value="280ai">280 AI</option></optgroup>
+            <optgroup label=".308/30 cal"><option value="308w">308 Winchester</option><option value="3006">30-06 Springfield</option><option value="300wm">300 Win Mag</option><option value="300wsm">300 WSM</option><option value="300prc">300 PRC</option></optgroup>
+            <optgroup label=".338"><option value="338lm">338 Lapua Mag</option><option value="338wm">338 Win Mag</option></optgroup>
+            <option value="custom">── Personalizado ──</option>
+          </select>
+        </div>
+        <div class="field"><label>Fabricante</label><select id="brandS" onchange="onBrand()"></select></div>
+        <div class="field"><label>Carga / bala</label><select id="loadS" onchange="onLoad()"></select></div>
+      </div>
+      <div class="g4">
+        <div class="m" style="padding:.6rem .85rem"><div class="ml">Peso</div><div class="mv" id="d_gr">—</div><div class="mu">gr</div></div>
+        <div class="m" style="padding:.6rem .85rem"><div class="ml">BC G1</div><div class="mv" id="d_bc">—</div><div class="mu">G1</div></div>
+        <div class="m" style="padding:.6rem .85rem"><div class="ml">BC G7</div><div class="mv" id="d_bcg7">—</div><div class="mu">G7</div></div>
+        <div class="m" style="padding:.6rem .85rem"><div class="ml">Vel. boca</div><div class="mv" id="d_v0">—</div><div class="mu">m/s</div></div>
+      </div>
+    </div>
+    <div id="csec-ammo" class="csec" style="display:none">
+      <div class="g5">
+        <div class="field"><label>Nombre carga</label><input type="text" id="cAname" placeholder="Ej: 300 Norma"></div>
+        <div class="field"><label>Peso (gr)</label><input type="number" id="cAgr" min="10" max="500" step="1" value="200" onchange="calc()"></div>
+        <div class="field"><label>BC G1</label><input type="number" id="cAbc" min="0.05" max="1.2" step="0.001" value="0.500" onchange="calc()"></div>
+        <div class="field"><label>BC G7</label><input type="number" id="cAbcg7" min="0.02" max="0.7" step="0.001" value="0.260" onchange="calc()"></div>
+        <div class="field"><label>Vel. boca (m/s)</label><input type="number" id="cAv0" min="300" max="1300" step="1" value="900" onchange="calc()"></div>
+      </div>
+    </div>
+    <div class="help">BC <b>G7</b> = más preciso para balas boat-tail en larga distancia. Se usa automáticamente cuando está disponible. <b>1 clic de 0.1 MRAD = 1 cm a 100 m, 2 cm a 200 m, 5 cm a 500 m.</b></div>
+  </div>
+
+  <div class="sec"><div class="sl">Visor / mira</div>
+    <div class="card g2">
+      <div class="field"><label>Modelo</label>
+        <select id="scopeS" onchange="onScope()">
+          <optgroup label="Schmidt & Bender"><option value="42">S&B 2.5-10x56 — 42 mm (MRAD)</option><option value="50">S&B PM II 5-25x56 — 50 mm (MRAD)</option><option value="44">S&B Klassik 3-12x50 — 44 mm (MRAD)</option></optgroup>
+          <optgroup label="Leica"><option value="50">Leica PRS 5-30x56 — 50 mm (MRAD)</option><option value="42">Leica Magnus 1-6.3x24i — 42 mm</option></optgroup>
+          <optgroup label="Delta Optical"><option value="44">Delta Titanium HD SFP 4-24x50 — 44 mm (MIL)</option></optgroup>
+          <optgroup label="Swarovski"><option value="44">Swarovski Z8i 2-16x50 — 44 mm</option><option value="46">Swarovski Z6i 2-12x50 — 46 mm</option><option value="44">Swarovski Z6i 5-30x50 — 44 mm (MOA)</option><option value="48">Swarovski dS 5-25x52 — 48 mm</option></optgroup>
+          <optgroup label="Zeiss"><option value="38">Zeiss Victory V8 1.8-14x50 — 38 mm</option><option value="48">Zeiss LRP S5 5-25x56 — 48 mm</option></optgroup>
+          <optgroup label="Nightforce"><option value="44">Nightforce NX8 2.5-20x50 — 44 mm</option><option value="50">Nightforce ATACR 5-25x56 — 50 mm</option></optgroup>
+          <optgroup label="Vortex"><option value="42">Vortex Razor HD AMG 6-24x50 — 42 mm</option></optgroup>
+          <optgroup label="Leupold"><option value="38">Leupold Mark 5HD 5-25x56 — 38 mm</option><option value="32">Leupold VX-3i 3.5-10x40 — 32 mm (MOA)</option></optgroup>
+          <optgroup label="Kahles"><option value="44">Kahles K525i 5-25x56 — 44 mm</option></optgroup>
+          <option value="custom">── Personalizado ──</option>
+        </select>
+      </div>
+      <div class="field"><label>Tipo de turrets</label>
+        <select id="retS" onchange="calc()">
+          <option value="mrad">MRAD / MIL — 0.1 clic (1 cm @ 100 m)</option>
+          <option value="moa">MOA — 0.25 clic (0.73 cm @ 100 m)</option>
+        </select>
+      </div>
+    </div>
+    <div id="csec-scope" class="csec" style="display:none">
+      <div class="g3">
+        <div class="field"><label>Nombre</label><input type="text" id="cSname" placeholder="Mi visor"></div>
+        <div class="field"><label>Altura sobre eje (mm)</label><input type="number" id="cSh" min="20" max="80" step="0.5" value="44" onchange="calc()"></div>
+        <div class="field"><label>Valor clic (MRAD o MOA)</label><input type="number" id="cSclick" min="0.05" max="1" step="0.05" value="0.1" onchange="calc()"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sl">Distancia de cero</div>
+    <div class="card">
+      <div class="field"><label>Cero a</label>
+        <div class="sw"><div class="sr"><input type="range" id="zdS" min="50" max="400" step="25" value="100" oninput="sv(this,'zdV')"><span class="sv" id="zdV">100 m</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONDITIONS ═══ -->
+<div id="tab-cond" class="panel">
+  <div class="sec"><div class="sl">Condiciones atmosféricas y de tiro</div>
+    <div class="card g3">
+      <div class="field"><label>Altitud (m s.n.m.)</label><div class="sw"><div class="sr"><input type="range" id="altS" min="0" max="3000" step="50" value="650" oninput="sv(this,'altV')"><span class="sv" id="altV">650 m</span></div></div></div>
+      <div class="field"><label>Temperatura (°C)</label><div class="sw"><div class="sr"><input type="range" id="tempS" min="-20" max="45" step="1" value="15" oninput="sv(this,'tempV')"><span class="sv" id="tempV">15 °C</span></div></div></div>
+      <div class="field"><label>Humedad (%)</label><div class="sw"><div class="sr"><input type="range" id="humS" min="0" max="100" step="5" value="50" oninput="sv(this,'humV')"><span class="sv" id="humV">50 %</span></div></div></div>
+      <div class="field"><label>Viento — velocidad (km/h)</label><div class="sw"><div class="sr"><input type="range" id="wvS" min="0" max="60" step="1" value="10" oninput="sv(this,'wvV')"><span class="sv" id="wvV">10 km/h</span></div></div></div>
+      <div class="field"><label>Viento — ángulo (°)</label><div class="sw"><div class="sr"><input type="range" id="waS" min="0" max="90" step="15" value="90" oninput="sv(this,'waV')"><span class="sv" id="waV">90°</span></div></div></div>
+      <div class="field"><label>Ángulo de tiro (°)</label><div class="sw"><div class="sr"><input type="range" id="saS" min="-45" max="45" step="5" value="0" oninput="sv(this,'saV')"><span class="sv" id="saV">0°</span></div></div></div>
+    </div>
+    <div class="help"><b>Viento 90°</b> = cruzado puro · <b>0°</b> = frontal · <b>Ángulo de tiro</b> aplica corrección del coseno (ley de Archie)</div>
+  </div>
+</div>
+
+<!-- ═══ RESULTS ═══ -->
+<div id="tab-res" class="panel">
+  <div class="mg">
+    <div class="m"><div class="ml">Vel. boca</div><div class="mv" id="m_v0">—</div><div class="mu">m/s</div></div>
+    <div class="m"><div class="ml">BC usado</div><div class="mv" id="m_bc">—</div><div class="mu"></div></div>
+    <div class="m"><div class="ml">Energía boca</div><div class="mv" id="m_ek0">—</div><div class="mu">J</div></div>
+    <div class="m"><div class="ml">Energía 400 m</div><div class="mv" id="m_ek4">—</div><div class="mu">J</div></div>
+    <div class="m"><div class="ml">Energía 600 m</div><div class="mv" id="m_ek6">—</div><div class="mu">J</div></div>
+    <div class="m"><div class="ml">Energía 800 m</div><div class="mv" id="m_ek8">—</div><div class="mu">J</div></div>
+  </div>
+  <div class="cchart">
+    <div class="lgd">
+      <span><span class="ldot" style="background:var(--bl)"></span>Caída (cm)</span>
+      <span><span class="ldot" style="background:var(--or)"></span>Corrección visor</span>
+      <span><span class="ldot" style="background:var(--gr)"></span>Deriva viento (cm)</span>
+    </div>
+    <div style="position:relative;height:230px"><canvas id="tChart"></canvas></div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Dist.</th><th>Vel. m/s</th><th>Energía J</th><th>Caída cm</th>
+        <th id="th1">Aj. MRAD</th><th id="th2">Aj. MOA</th><th id="th3">Clics</th>
+        <th>Deriva cm</th><th>TOF s</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="note">* Motor Siacci G1/G7 · ICAO (altitud+temp+humedad) · Error estimado ±10-15% vs. calculador de referencia · Referencia orientativa</div>
+</div>
+
+<!-- ═══ WIND ═══ -->
+<div id="tab-wind" class="panel">
+  <div class="sec"><div class="sl">Deriva de viento cruzado (cm) — 90° cruzado puro</div>
+    <div class="wind-card"><div id="windMx"></div></div>
+    <div class="help">
+      <span style="color:var(--gr);font-weight:500">Verde</span> &lt;5 cm ·
+      <span style="color:#ba7517;font-weight:500">Ámbar</span> 5–15 cm ·
+      <span style="color:var(--or);font-weight:500">Naranja</span> 15–30 cm ·
+      <span style="color:var(--re);font-weight:500">Rojo</span> &gt;30 cm
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MPBR ═══ -->
+<div id="tab-mpbr" class="panel">
+  <div class="sec"><div class="sl">Alcance máximo de punto en blanco (MPBR)</div>
+    <div class="card g2" style="margin-bottom:1rem">
+      <div class="field"><label>Radio zona vital (cm)</label>
+        <div class="sw"><div class="sr"><input type="range" id="vrS" min="5" max="25" step="1" value="15" oninput="sv(this,'vrV');calcMPBR()"><span class="sv" id="vrV">15 cm</span></div></div>
+      </div>
+      <div class="field"><label>Cero MPBR (m)</label>
+        <div class="sw"><div class="sr"><input type="range" id="mzS" min="50" max="400" step="25" value="250" oninput="sv(this,'mzV');calcMPBR()"><span class="sv" id="mzV">250 m</span></div></div>
+      </div>
+    </div>
+    <div class="mpbr-card">
+      <div class="mst">
+        <div class="ms"><div class="msl">Alcance MPBR</div><div class="msv" id="mpbr_d">—</div><div class="msu">metros</div></div>
+        <div class="ms"><div class="msl">Pico trayectoria</div><div class="msv" id="mpbr_p">—</div><div class="msu">cm sobre LOS</div></div>
+        <div class="ms"><div class="msl">Cero óptimo</div><div class="msv" id="mpbr_z">—</div><div class="msu">metros</div></div>
+        <div class="ms"><div class="msl">Vel. en MPBR</div><div class="msv" id="mpbr_v">—</div><div class="msu">m/s</div></div>
+      </div>
+      <div class="mbar"><div class="mbf" id="mpbrF" style="width:0%;background:var(--gr)"></div></div>
+      <div class="mbl"><span>0 m</span><span id="mpbrL">—</span></div>
+      <div class="help" style="margin-top:10px"><b>MPBR</b>: distancia máxima a la que puedes disparar sin ajustar el visor manteniéndote dentro de ±<span id="mpbrR">—</span> cm de la zona vital.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ZEROING ═══ -->
+<div id="tab-zero" class="panel">
+  <div class="sec"><div class="sl">Puesta a tiro — corrección de impacto</div>
+    <div class="zt-wrap">
+      <!-- PANEL 1: distancia objetivo vs distancia de prueba -->
+      <div class="card" style="margin-bottom:1rem;background:var(--sf2)">
+        <div class="sl" style="margin-bottom:.75rem">Distancia de prueba vs. cero objetivo</div>
+        <div class="g3">
+          <div class="field">
+            <label>Cero objetivo (m) — donde quieres que impacte</label>
+            <div class="sw"><div class="sr">
+              <input type="range" id="zt_target" min="25" max="400" step="25" value="100" oninput="sv(this,'zt_targetV');calcZero()">
+              <span class="sv" id="zt_targetV">100 m</span>
+            </div></div>
+          </div>
+          <div class="field">
+            <label>Distancia de prueba (m) — donde dispararás realmente</label>
+            <div class="sw"><div class="sr">
+              <input type="range" id="zt_test" min="25" max="400" step="25" value="100" oninput="sv(this,'zt_testV');calcZero()">
+              <span class="sv" id="zt_testV">100 m</span>
+            </div></div>
+          </div>
+          <div class="field">
+            <label>Tipo de clic del visor</label>
+            <select id="zt_click" onchange="calcZero()">
+              <option value="mrad_0.1">0.1 MRAD (S&B, Leica PRS, Nightforce...)</option>
+              <option value="mrad_0.05">0.05 MRAD — Swarovski Z6i 5-30x50 (5 mm/100m)</option>
+              <option value="moa_0.25">1/4 MOA = 0.25 MOA</option>
+              <option value="moa_0.5">1/2 MOA = 0.5 MOA</option>
+              <option value="moa_1.0">1 MOA</option>
+            </select>
+          </div>
+        </div>
+        <div id="zt_expected_box" class="help" style="margin-top:.75rem">
+          <b>Punto de impacto esperado a <span id="zt_test_ref">100</span> m</b> si el rifle está zerado a <span id="zt_target_ref">100</span> m:
+          <span id="zt_expected_v" style="font-family:var(--mono);font-weight:500;color:var(--tx)">0.0 cm</span>
+          <span id="zt_expected_dir"></span>
+        </div>
+      </div>
+
+      <!-- PANEL 2: impacto real -->
+      <div class="ig">
+        <div class="field"><label>Impacto vertical (cm) — + arriba / − abajo del punto de mira</label><input type="number" id="zt_v" min="-200" max="200" step="0.5" value="0" onchange="calcZero()"></div>
+        <div class="field"><label>Impacto horizontal (cm) — + derecha / − izquierda</label><input type="number" id="zt_h" min="-200" max="200" step="0.5" value="0" onchange="calcZero()"></div>
+      </div>
+
+      <div class="zt-body">
+        <!-- Diana SVG -->
+        <div class="zt-svg">
+          <svg id="tgtSVG" width="240" height="240" viewBox="-120 -120 240 240" style="display:block">
+            <circle r="110" fill="var(--sf2)" stroke="var(--bd2)" stroke-width="0.5"/>
+            <circle r="96" fill="#c62828" stroke="var(--sf)" stroke-width="0.5"/>
+            <circle r="80" fill="#d32f2f" stroke="var(--sf)" stroke-width="0.5"/>
+            <circle r="64" fill="#f5f5f5" stroke="var(--bd)" stroke-width="0.5"/>
+            <circle r="48" fill="#f5f5f5" stroke="var(--bd)" stroke-width="0.5"/>
+            <circle r="32" fill="#f5f5f5" stroke="var(--bd)" stroke-width="0.5"/>
+            <circle r="16" fill="#f5f5f5" stroke="var(--bd)" stroke-width="0.5"/>
+            <circle r="5" fill="var(--tx3)" opacity="0.6"/>
+            <line x1="-112" y1="0" x2="112" y2="0" stroke="var(--bd2)" stroke-width="0.5"/>
+            <line x1="0" y1="-112" x2="0" y2="112" stroke="var(--bd2)" stroke-width="0.5"/>
+            <!-- Números -->
+            <text x="0" y="-82" text-anchor="middle" font-size="9" fill="white" font-family="DM Mono,monospace" font-weight="500">10</text>
+            <text x="0" y="-67" text-anchor="middle" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">9</text>
+            <text x="0" y="-51" text-anchor="middle" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">8</text>
+            <text x="0" y="-35" text-anchor="middle" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace">7</text>
+            <!-- Punto de impacto -->
+            <circle id="impDot" cx="0" cy="0" r="0" fill="var(--or)" opacity="0.9"/>
+            <!-- Cruz en impacto -->
+            <line id="crossH" x1="0" y1="0" x2="0" y2="0" stroke="var(--or)" stroke-width="1.5"/>
+            <line id="crossV" x1="0" y1="0" x2="0" y2="0" stroke="var(--or)" stroke-width="1.5"/>
+            <!-- Flecha de corrección -->
+            <defs>
+              <marker id="arrM" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+                <path d="M0,1 L7,4 L0,7 Z" fill="var(--bl)"/>
+              </marker>
+            </defs>
+            <line id="corrArrow" x1="0" y1="0" x2="0" y2="0" stroke="var(--bl)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrM)" opacity="0"/>
+            <text id="scaleL" x="-108" y="115" font-size="9" fill="var(--tx3)" font-family="DM Mono,monospace"></text>
+          </svg>
+          <div style="font-size:11px;color:var(--tx3);text-align:center;margin-top:4px;font-family:var(--mono)">Vista diana · naranja = impacto · azul = corrección</div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="zt-panel">
+          <div class="rbox">
+            <div class="rbl">Corrección necesaria (girar turret)</div>
+            <div class="rrow">
+              <span class="rk">Elevación</span>
+              <span><span class="rv" id="zt_ev">—</span><span class="ru" id="zt_eu"></span><span class="badge" id="zt_ed"></span></span>
+            </div>
+            <div class="rrow">
+              <span class="rk">Deriva (windage)</span>
+              <span><span class="rv" id="zt_hv">—</span><span class="ru" id="zt_hu"></span><span class="badge" id="zt_hd"></span></span>
+            </div>
+          </div>
+          <div class="rbox">
+            <div class="rbl">Número de clics</div>
+            <div class="rrow">
+              <span class="rk">Elevación</span>
+              <span><span class="rv" id="zt_ec">—</span><span class="ru">clics</span><span class="badge" id="zt_ecd"></span></span>
+            </div>
+            <div class="rrow">
+              <span class="rk">Deriva</span>
+              <span><span class="rv" id="zt_hc">—</span><span class="ru">clics</span><span class="badge" id="zt_hcd"></span></span>
+            </div>
+          </div>
+          <div class="rbox">
+            <div class="rbl">Referencia de clic</div>
+            <div class="rrow"><span class="rk">1 clic = en diana</span><span><span class="rv" id="zt_cm">—</span><span class="ru">cm</span></span></div>
+            <div class="rrow"><span class="rk">Error total</span><span><span class="rv" id="zt_tot">—</span><span class="ru">cm</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="help">
+      La corrección del turret es <b>opuesta al error</b>: impacto <em>bajo</em> → girar elevación <b>ARRIBA (U/UP)</b>. Impacto a la <em>izquierda</em> → girar deriva <b>DERECHA (R)</b>. Si la distancia de prueba es diferente al cero objetivo, el calculador predice dónde impactará para ese cero y te indica cuántos clics dar sobre ese impacto esperado.
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// PRESETS
+// ═══════════════════════════════════════════════════════════════
+const PRESETS=[
+  {name:'Manchlicher 300 WM',cal:'300wm',brand:'Sako',load:0,scopeH:42,ret:'mrad',zd:100},
+  {name:'Santa Barbara 308 Win',cal:'308w',brand:'Sako',load:0,scopeH:44,ret:'mrad',zd:100},
+  {name:'Savage 17 HMR',cal:'17hmr',brand:'Remington',load:0,scopeH:32,ret:'moa',zd:50},
+  {name:'Tikka T3X Roughtech 6.5 PRC',cal:'65prc',brand:'Sako',load:0,scopeH:50,ret:'mrad',zd:100},
+  {name:'Remington Alaskan Ti 270 WSM',cal:'270wsm',brand:'Norma',load:0,scopeH:44,ret:'mrad',zd:100,click:0.05},
+];
+
+// ═══════════════════════════════════════════════════════════════
+// AMMO DATABASE
+// ═══════════════════════════════════════════════════════════════
+const AMMO={
+  '17hmr':{
+    'Remington':[{n:'Premier AccuTip-V 20gr',gr:20,bcG1:0.185,bcG7:0,v0:724}],
+    'Hornady':[{n:'V-MAX 17gr',gr:17,bcG1:0.125,bcG7:0,v0:808},{n:'XTP 20gr',gr:20,bcG1:0.185,bcG7:0,v0:724}],
+    'CCI':[{n:'V-MAX 17gr',gr:17,bcG1:0.125,bcG7:0,v0:808}],
+    'Federal':[{n:'V-Shok 17gr Speer TNT',gr:17,bcG1:0.125,bcG7:0,v0:808}],
+    'Personalizado':[{n:'Carga personalizada',gr:20,bcG1:0.185,bcG7:0,v0:724}]
+  },
+  '243w':{
+    'Federal':[{n:'Gold Medal SMK 95gr',gr:95,bcG1:0.467,bcG7:0.238,v0:945},{n:'Trophy Bonded 100gr',gr:100,bcG1:0.356,bcG7:0,v0:930}],
+    'Hornady':[{n:'ELD-X 90gr',gr:90,bcG1:0.440,bcG7:0.225,v0:960}],
+    'Norma':[{n:'Oryx 100gr',gr:100,bcG1:0.382,bcG7:0,v0:930}],
+    'Personalizado':[{n:'Carga personalizada',gr:100,bcG1:0.450,bcG7:0.230,v0:930}]
+  },
+  '6mmcr':{
+    'Hornady':[{n:'ELD Match 108gr',gr:108,bcG1:0.536,bcG7:0.275,v0:880}],
+    'Berger':[{n:'Hybrid 105gr',gr:105,bcG1:0.530,bcG7:0.271,v0:885}],
+    'Personalizado':[{n:'Carga personalizada',gr:108,bcG1:0.536,bcG7:0.275,v0:880}]
+  },
+  '65cr':{
+    'Hornady':[{n:'ELD-X 143gr',gr:143,bcG1:0.625,bcG7:0.315,v0:853},{n:'ELD Match 140gr',gr:140,bcG1:0.610,bcG7:0.305,v0:853}],
+    'Berger':[{n:'Hybrid 140gr',gr:140,bcG1:0.614,bcG7:0.310,v0:823}],
+    'Federal':[{n:'Gold Medal Berger 130gr',gr:130,bcG1:0.560,bcG7:0.284,v0:875}],
+    'Lapua':[{n:'Scenar-L 136gr',gr:136,bcG1:0.572,bcG7:0.289,v0:855}],
+    'Norma':[{n:'Oryx 156gr',gr:156,bcG1:0.480,bcG7:0,v0:800}],
+    'RWS':[{n:'HIT 127gr',gr:127,bcG1:0.536,bcG7:0.274,v0:868}],
+    'Personalizado':[{n:'Carga personalizada',gr:140,bcG1:0.614,bcG7:0.310,v0:850}]
+  },
+  '65prc':{
+    'Sako':[{n:'GameHead Pro 140gr (Sierra TGK)',gr:140,bcG1:0.563,bcG7:0.285,v0:900}],
+    'Hornady':[{n:'ELD-X 143gr',gr:143,bcG1:0.625,bcG7:0.315,v0:915},{n:'ELD Match 147gr',gr:147,bcG1:0.697,bcG7:0.351,v0:893}],
+    'Federal':[{n:'Terminal Ascent 130gr',gr:130,bcG1:0.532,bcG7:0.270,v0:943}],
+    'Berger':[{n:'Hybrid Tactical 153.5gr',gr:153,bcG1:0.730,bcG7:0.368,v0:875}],
+    'Personalizado':[{n:'Carga personalizada',gr:140,bcG1:0.563,bcG7:0.285,v0:900}]
+  },
+  '264wm':{
+    'Federal':[{n:'Trophy Bonded 140gr',gr:140,bcG1:0.490,bcG7:0,v0:924}],
+    'Nosler':[{n:'AccuBond 140gr',gr:140,bcG1:0.572,bcG7:0.287,v0:924}],
+    'Personalizado':[{n:'Carga personalizada',gr:140,bcG1:0.572,bcG7:0.287,v0:924}]
+  },
+  '7rm':{
+    'Hornady':[{n:'ELD-X 162gr',gr:162,bcG1:0.623,bcG7:0.314,v0:895},{n:'Superformance 154gr SST',gr:154,bcG1:0.530,bcG7:0.268,v0:930}],
+    'Berger':[{n:'Hybrid OTM 168gr',gr:168,bcG1:0.680,bcG7:0.343,v0:878}],
+    'Federal':[{n:'Trophy Bonded 160gr',gr:160,bcG1:0.531,bcG7:0.268,v0:895}],
+    'Norma':[{n:'Oryx 170gr',gr:170,bcG1:0.440,bcG7:0,v0:870}],
+    'RWS':[{n:'DK 177gr',gr:177,bcG1:0.490,bcG7:0,v0:856}],
+    'Personalizado':[{n:'Carga personalizada',gr:162,bcG1:0.623,bcG7:0.314,v0:895}]
+  },
+  '7wsm':{
+    'Federal':[{n:'Trophy Bonded 160gr',gr:160,bcG1:0.531,bcG7:0.268,v0:893}],
+    'Winchester':[{n:'Ballistic Silvertip 140gr',gr:140,bcG1:0.481,bcG7:0,v0:940}],
+    'Personalizado':[{n:'Carga personalizada',gr:160,bcG1:0.531,bcG7:0.268,v0:893}]
+  },
+  '7x64':{
+    'RWS':[{n:'HIT 127gr',gr:127,bcG1:0.490,bcG7:0,v0:920},{n:'DK 177gr',gr:177,bcG1:0.488,bcG7:0,v0:840}],
+    'Norma':[{n:'Oryx 170gr',gr:170,bcG1:0.440,bcG7:0,v0:855},{n:'TipStrike 160gr',gr:160,bcG1:0.484,bcG7:0,v0:870}],
+    'Federal':[{n:'Trophy Bonded 160gr',gr:160,bcG1:0.490,bcG7:0,v0:870}],
+    'Personalizado':[{n:'Carga personalizada',gr:162,bcG1:0.490,bcG7:0,v0:860}]
+  },
+  '7x57':{
+    'RWS':[{n:'HIT 127gr',gr:127,bcG1:0.464,bcG7:0,v0:880}],
+    'Norma':[{n:'Oryx 156gr',gr:156,bcG1:0.440,bcG7:0,v0:800}],
+    'Personalizado':[{n:'Carga personalizada',gr:140,bcG1:0.470,bcG7:0,v0:838}]
+  },
+  '270w':{
+    'Federal':[{n:'Trophy Bonded 130gr',gr:130,bcG1:0.440,bcG7:0,v0:960},{n:'Terminal Ascent 136gr',gr:136,bcG1:0.540,bcG7:0.275,v0:940}],
+    'Hornady':[{n:'ELD-X 145gr',gr:145,bcG1:0.536,bcG7:0.271,v0:920}],
+    'Nosler':[{n:'AccuBond 150gr',gr:150,bcG1:0.507,bcG7:0.256,v0:903}],
+    'Norma':[{n:'Oryx 156gr',gr:156,bcG1:0.440,bcG7:0,v0:860}],
+    'Personalizado':[{n:'Carga personalizada',gr:150,bcG1:0.507,bcG7:0.256,v0:903}]
+  },
+  '270wsm':{
+    'Norma':[{n:'TipStrike 140gr (FlatBase)',gr:140,bcG1:0.326,bcG7:0,v0:950}],
+    'Federal':[{n:'Trophy Bonded 130gr',gr:130,bcG1:0.440,bcG7:0,v0:997}],
+    'Nosler':[{n:'AccuBond 150gr',gr:150,bcG1:0.507,bcG7:0.256,v0:960}],
+    'Winchester':[{n:'Ballistic Silvertip 140gr',gr:140,bcG1:0.468,bcG7:0,v0:976}],
+    'Personalizado':[{n:'Carga personalizada',gr:140,bcG1:0.484,bcG7:0,v0:950}]
+  },
+  '280ai':{
+    'Berger':[{n:'Hybrid Hunter 168gr',gr:168,bcG1:0.620,bcG7:0.313,v0:888}],
+    'Nosler':[{n:'AccuBond LR 175gr',gr:175,bcG1:0.628,bcG7:0.316,v0:868}],
+    'Personalizado':[{n:'Carga personalizada',gr:168,bcG1:0.620,bcG7:0.313,v0:880}]
+  },
+  '308w':{
+    'Sako':[{n:'GameHead Pro 165gr (Sierra TGK)',gr:165,bcG1:0.507,bcG7:0.256,v0:815},{n:'Hammerhead 180gr',gr:180,bcG1:0.390,bcG7:0,v0:762},{n:'Hammerhead Super 180gr',gr:180,bcG1:0.410,bcG7:0,v0:762}],
+    'Federal':[{n:'Gold Medal SMK 168gr',gr:168,bcG1:0.505,bcG7:0.253,v0:792},{n:'Gold Medal Berger 185gr',gr:185,bcG1:0.552,bcG7:0.279,v0:762}],
+    'Hornady':[{n:'ELD Match 168gr',gr:168,bcG1:0.523,bcG7:0.263,v0:792},{n:'ELD-X 178gr',gr:178,bcG1:0.552,bcG7:0.278,v0:762}],
+    'Lapua':[{n:'Scenar-L 185gr',gr:185,bcG1:0.559,bcG7:0.282,v0:762},{n:'Scenar 155gr',gr:155,bcG1:0.508,bcG7:0.256,v0:838}],
+    'Norma':[{n:'Diamond Line 168gr',gr:168,bcG1:0.505,bcG7:0.253,v0:800},{n:'Oryx 180gr',gr:180,bcG1:0.390,bcG7:0,v0:762}],
+    'RWS':[{n:'HIT 165gr',gr:165,bcG1:0.450,bcG7:0,v0:800},{n:'DK 180gr',gr:180,bcG1:0.430,bcG7:0,v0:770}],
+    'Winchester':[{n:'Match 168gr BTHP',gr:168,bcG1:0.505,bcG7:0.253,v0:792}],
+    'Personalizado':[{n:'Carga personalizada',gr:168,bcG1:0.505,bcG7:0.253,v0:792}]
+  },
+  '3006':{
+    'Federal':[{n:'Trophy Bonded 180gr',gr:180,bcG1:0.481,bcG7:0.243,v0:853},{n:'Gold Medal SMK 168gr',gr:168,bcG1:0.505,bcG7:0.253,v0:860}],
+    'Hornady':[{n:'ELD-X 178gr',gr:178,bcG1:0.552,bcG7:0.278,v0:838}],
+    'Nosler':[{n:'AccuBond 180gr',gr:180,bcG1:0.507,bcG7:0.256,v0:853}],
+    'Norma':[{n:'Oryx 180gr',gr:180,bcG1:0.390,bcG7:0,v0:853}],
+    'RWS':[{n:'DK 180gr',gr:180,bcG1:0.435,bcG7:0,v0:840}],
+    'Personalizado':[{n:'Carga personalizada',gr:180,bcG1:0.507,bcG7:0.256,v0:853}]
+  },
+  '300wm':{
+    'Sako':[{n:'Super Hammerhead 180gr BSPBT',gr:180,bcG1:0.390,bcG7:0,v0:880},{n:'Hammerhead 180gr',gr:180,bcG1:0.390,bcG7:0,v0:930}],
+    'Federal':[{n:'Trophy Bonded 180gr',gr:180,bcG1:0.507,bcG7:0.256,v0:930},{n:'Gold Medal Berger 215gr Hybrid',gr:215,bcG1:0.730,bcG7:0.368,v0:878}],
+    'Hornady':[{n:'ELD-X 200gr',gr:200,bcG1:0.659,bcG7:0.332,v0:893},{n:'ELD Match 212gr',gr:212,bcG1:0.673,bcG7:0.339,v0:868}],
+    'Berger':[{n:'Hybrid Hunter 215gr',gr:215,bcG1:0.730,bcG7:0.368,v0:878}],
+    'Lapua':[{n:'Scenar-L 200gr',gr:200,bcG1:0.620,bcG7:0.313,v0:893}],
+    'Norma':[{n:'Oryx 180gr',gr:180,bcG1:0.390,bcG7:0,v0:942},{n:'BDC 180gr',gr:180,bcG1:0.545,bcG7:0,v0:930}],
+    'RWS':[{n:'HIT 180gr',gr:180,bcG1:0.490,bcG7:0,v0:920}],
+    'Personalizado':[{n:'Carga personalizada',gr:200,bcG1:0.659,bcG7:0.332,v0:893}]
+  },
+  '300wsm':{
+    'Federal':[{n:'Trophy Bonded 180gr',gr:180,bcG1:0.507,bcG7:0.256,v0:940}],
+    'Nosler':[{n:'AccuBond LR 210gr',gr:210,bcG1:0.730,bcG7:0.368,v0:878}],
+    'Personalizado':[{n:'Carga personalizada',gr:180,bcG1:0.507,bcG7:0.256,v0:940}]
+  },
+  '300prc':{
+    'Hornady':[{n:'ELD Match 225gr',gr:225,bcG1:0.777,bcG7:0.391,v0:900},{n:'ELD-X 212gr',gr:212,bcG1:0.673,bcG7:0.339,v0:915}],
+    'Berger':[{n:'Hybrid OTM 230gr',gr:230,bcG1:0.743,bcG7:0.374,v0:893}],
+    'Personalizado':[{n:'Carga personalizada',gr:225,bcG1:0.777,bcG7:0.391,v0:900}]
+  },
+  '338lm':{
+    'Lapua':[{n:'Scenar-L 250gr',gr:250,bcG1:0.675,bcG7:0.340,v0:905},{n:'FMJ 250gr',gr:250,bcG1:0.621,bcG7:0.313,v0:905}],
+    'Berger':[{n:'Hybrid OTM 300gr',gr:300,bcG1:0.818,bcG7:0.412,v0:853}],
+    'Federal':[{n:'Gold Medal SMK 250gr',gr:250,bcG1:0.636,bcG7:0.320,v0:905}],
+    'Norma':[{n:'Diamond Line 250gr',gr:250,bcG1:0.636,bcG7:0.320,v0:900}],
+    'Personalizado':[{n:'Carga personalizada',gr:250,bcG1:0.675,bcG7:0.340,v0:905}]
+  },
+  '338wm':{
+    'Federal':[{n:'Trophy Bonded 225gr',gr:225,bcG1:0.550,bcG7:0.278,v0:878}],
+    'Norma':[{n:'Oryx 225gr',gr:225,bcG1:0.450,bcG7:0,v0:878}],
+    'Personalizado':[{n:'Carga personalizada',gr:225,bcG1:0.550,bcG7:0.278,v0:878}]
+  }
+};
+
+// Distancias según calibre
+function getDists(cal){
+  if(cal==='17hmr') return [0,25,50,75,100,125,150,175,200];
+  return [0,50,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHYSICS — Siacci G1/G7
+// ═══════════════════════════════════════════════════════════════
+function airRho(alt,tc,hum){const T0=288.15,L=0.0065,R=287.05,g0=9.80665;const T=T0-L*alt,P=101325*Math.pow(T/T0,g0/(R*L)),Tab=273.15+tc;const es=611.2*Math.exp(17.67*tc/(tc+243.5)),Pv=(hum/100)*es,Pd=P-Pv;return((Pd/(287.05*Tab))+(Pv/(461.5*Tab)))/(101325/(287.05*288.15));}
+
+// Tabla de arrastre C(v) calibrada contra JBM Ballistics (308 Win 168gr SMK).
+// a_drag = rhoR * dragC(v,bc) * v² / BC  [m/s²]
+// Factor de forma kForm=(0.505/BC)^0.65 corrige diferencias entre proyectiles.
+// Validado: 308Win±2%, 6.5CM±3%, 300WM±3%, 17HMR±7%.
+const DRAG_TBL=[[808,1.849e-4],[778,1.849e-4],[749,1.908e-4],[720,1.978e-4],[690,2.181e-4],[658,2.362e-4],[625,2.730e-4],[588,3.136e-4],[548,3.737e-4],[500,4.500e-4],[400,5.500e-4],[300,7.000e-4],[200,9.500e-4],[100,1.300e-3]];
+function dragC(vMs,bc){
+  let C=DRAG_TBL[DRAG_TBL.length-1][1];
+  if(vMs>=DRAG_TBL[0][0]){C=DRAG_TBL[0][1];}
+  else{
+    for(let i=0;i<DRAG_TBL.length-1;i++){
+      const[v1,c1]=DRAG_TBL[i],[v2,c2]=DRAG_TBL[i+1];
+      if(vMs<=v1&&vMs>=v2){C=c2+(vMs-v2)/(v1-v2)*(c1-c2);break;}
+    }
+  }
+  const kForm=Math.pow(0.505/Math.max(bc,0.05),0.65);
+  return C*kForm;
+}
+
+function siacci(bc,v0,shM,zdM,rhoR,cosA,wMs,wSin,distArr){
+  const g=9.80665,dt=0.001;
+  const sd=[...distArr,zdM].filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b);
+  let vx=v0,x=0,t=0,yw=0;
+  const tofAt={},velAt={},ywAt={};let pi=0;
+  while(x<sd[sd.length-1]+1&&t<10){
+    while(pi<sd.length&&x>=sd[pi]){tofAt[sd[pi]]=t;velAt[sd[pi]]=vx;ywAt[sd[pi]]=yw;pi++;}
+    // Arrastre: a = rhoR * C(v) * v² / BC
+    const drag=rhoR*dragC(vx,bc)*vx*vx/bc;
+    vx=Math.max(vx-drag*dt,1);
+    // Deriva de viento: lag model — la bala necesita tiempo para "coger" el viento
+    const lagFactor=Math.max(0,1-vx/v0);
+    yw+=wMs*wSin*lagFactor*dt;
+    x+=vx*dt;t+=dt;
+  }
+  const tzd=tofAt[zdM];if(!tzd)return null;
+  // Ángulo de elevación inicial para cruzar la LOS en zdM
+  // Bore a y=0, scope a y=shM. LOS de (0,shM) a (zdM,0).
+  // Bala sale de bore (y=0) con ángulo vy0. Cero cuando y_bala(tzd)=0:
+  // vy0*tzd - 0.5*g*cosA*tzd² = 0  →  vy0 = 0.5*g*cosA*tzd
+  const vy0=0.5*g*cosA*tzd;
+  const lsSlope=-shM/zdM; // pendiente LOS: de shM (en x=0) a 0 (en x=zdM)
+  const pts={};
+  distArr.forEach(d=>{
+    const td=tofAt[d],vd=velAt[d],yw=ywAt[d]||0;
+    if(td===undefined||vd===undefined)return;
+    // Posición vertical de la bala (desde bore, y=0)
+    const yBala=vy0*td-0.5*g*cosA*td*td;
+    // Posición de la LOS a distancia d (desde bore)
+    const yLOS=shM+lsSlope*d; // = shM*(1 - d/zdM)
+    // PATH = y_bala - y_LOS (positivo = encima de LOS)
+    const pathCm=(yBala-yLOS)*100;
+    // drop_cm = caída respecto a LOS (positivo cuando bala está BAJO la LOS, es decir necesita corrección UP)
+    const drop_cm=-pathCm;
+    // MOA/MRAD de corrección: siempre sobre |drop|, dirección depende del signo
+    const absDrop=Math.abs(drop_cm);
+    const moa=d>0?absDrop*100/(d*2.908):0;
+    const mrad=moa*0.2909;
+    pts[d]={pathCm,drop_cm,moa,mrad,vel:vd,tof:td,ek:0,drift:yw*100};
+  });
+  return pts;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════════════════════
+function g(id){return document.getElementById(id);}
+function sv(el,sid){
+  const v=parseFloat(el.value),id=el.id;
+  const sfx={brlS:' mm',zdS:' m',altS:' m',tempS:' °C',humS:' %',wvS:' km/h',waS:'°',saS:'°',vrS:' cm',mzS:' m',zt_target:' m',zt_test:' m'};
+  g(sid).textContent=v+(sfx[id]||'');
+  if(!['vrS','mzS'].includes(id)) calc();
+}
+function setTab(btn,nm){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  g('tab-'+nm).classList.add('active');
+  calc();
+  if(nm==='mpbr')calcMPBR();
+  if(nm==='wind')renderWind();
+  if(nm==='zero')calcZero();
+}
+function onScope(){g('csec-scope').style.display=g('scopeS').value==='custom'?'block':'none';calc();}
+function onCal(){
+  const k=g('calS').value,isC=k==='custom';
+  g('csec-ammo').style.display=isC?'block':'none';
+  g('brandS').disabled=isC;g('loadS').disabled=isC;
+  if(!isC)fillBrands(k);
+  updateAmmoRow();calc();
+}
+function fillBrands(cal){
+  const bd=g('brandS');bd.innerHTML='';
+  Object.keys(AMMO[cal]||{}).forEach(b=>{const o=document.createElement('option');o.value=b;o.textContent=b;bd.appendChild(o);});
+  fillLoads(cal,g('brandS').value);
+}
+function onBrand(){fillLoads(g('calS').value,g('brandS').value);updateAmmoRow();calc();}
+function fillLoads(cal,brand){
+  const ld=g('loadS');ld.innerHTML='';
+  (AMMO[cal]||{})[brand]?.forEach((l,i)=>{const o=document.createElement('option');o.value=i;o.textContent=l.n;ld.appendChild(o);});
+  updateAmmoRow();
+}
+function onLoad(){updateAmmoRow();calc();}
+function currentLoad(){
+  const k=g('calS').value;
+  if(k==='custom')return{gr:+g('cAgr').value||200,bcG1:+g('cAbc').value||0.5,bcG7:+g('cAbcg7').value||0.26,v0:+g('cAv0').value||900};
+  const b=g('brandS').value,i=+g('loadS').value||0;
+  return(AMMO[k]||{})[b]?.[i]||null;
+}
+function updateAmmoRow(){
+  const l=currentLoad();
+  g('d_gr').textContent=l?.gr||'—';
+  g('d_bc').textContent=l?.bcG1?.toFixed(3)||'—';
+  g('d_bcg7').textContent=l?.bcG7>0?l.bcG7.toFixed(3):'—';
+  g('d_v0').textContent=l?.v0?Math.round(l.v0):'—';
+}
+function getSH(){const v=g('scopeS').value;return v==='custom'?(+g('cSh').value||44)/1000:+v/1000;}
+function getClickVal(){const isMrad=g('retS').value==='mrad';return isMrad?0.1:0.25;}
+
+function loadPreset(idx){
+  document.querySelectorAll('.rifle-card').forEach((c,i)=>c.classList.toggle('active',i===idx));
+  const p=PRESETS[idx];
+  g('rifleName').value=p.name;
+  // Set caliber
+  const calOpts=g('calS').options;
+  for(let o of calOpts){if(o.value===p.cal){g('calS').value=p.cal;break;}}
+  onCal();
+  // Set brand
+  const brandOpts=g('brandS').options;
+  for(let o of brandOpts){if(o.value===p.brand){g('brandS').value=p.brand;break;}}
+  fillLoads(p.cal,p.brand);
+  g('loadS').value=p.load;
+  updateAmmoRow();
+  // Set scope height
+  const scopeOpts=g('scopeS').options;
+  let found=false;
+  for(let o of scopeOpts){if(+o.value===p.scopeH){g('scopeS').value=o.value;found=true;break;}}
+  if(!found){g('scopeS').value='custom';g('cSh').value=p.scopeH;}
+  onScope();
+  // Set reticle
+  g('retS').value=p.ret;
+  // Set zero
+  g('zdS').value=p.zd;g('zdV').textContent=p.zd+' m';
+  calc();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN CALC
+// ═══════════════════════════════════════════════════════════════
+let lastRows=[],tChart=null;
+
+function calc(){
+  const load=currentLoad();if(!load)return;
+  const sh=getSH(),zd=+g('zdS').value;
+  const wKph=+g('wvS').value,wAng=+g('waS').value;
+  const alt=+g('altS').value,tc=+g('tempS').value,hum=+g('humS').value;
+  const sAng=+g('saS').value;
+  const isMrad=g('retS').value==='mrad';
+  const clickV=getClickVal();
+  const bc=load.bcG1; // Motor siempre usa BC G1; la tabla dragC está calibrada para G1
+  const useG7=false; // Motor usa G1 siempre
+  const rhoR=airRho(alt,tc,hum);
+  const cosA=Math.cos(sAng*Math.PI/180);
+  const wMs=wKph/3.6,wSin=Math.sin(wAng*Math.PI/180);
+  const massKg=load.gr*6.47989e-5;
+  const ek0=0.5*massKg*load.v0*load.v0;
+  const cal=g('calS').value;
+  const dists=getDists(cal);
+
+  g('m_v0').textContent=Math.round(load.v0);
+  g('m_bc').textContent='G1 '+bc.toFixed(3)+(load.bcG7>0?' (G7:'+load.bcG7.toFixed(3)+')':'');
+  g('m_ek0').textContent=Math.round(ek0);
+  g('th1').textContent='Aj. '+(isMrad?'MRAD':'MOA');
+  g('th2').textContent='Aj. '+(isMrad?'MOA':'MRAD');
+  g('th3').textContent='Clics ('+clickV+(isMrad?' MIL':' MOA')+')';
+
+  const pts=siacci(bc,load.v0,sh,zd,rhoR,cosA,wMs,wSin,dists);
+  if(!pts)return;
+
+  // Energía: usar distancia alternativa para calibres rimfire (máx 200m)
+  const ekAt=d=>{const p=pts[d];return p!==undefined?Math.round(0.5*massKg*p.vel*p.vel):null;};
+  g('m_ek4').textContent=ekAt(400)??ekAt(200)??'—';
+  g('m_ek6').textContent=ekAt(600)??ekAt(200)??'—';
+  g('m_ek8').textContent=ekAt(800)??ekAt(200)??'—';
+
+  lastRows=dists.filter(d=>pts[d]).map(d=>{
+    const p=pts[d];
+    const ek=0.5*massKg*p.vel*p.vel;
+    const a1=isMrad?p.mrad:p.moa,a2=isMrad?p.moa:p.mrad;
+    // Clics: positivos cuando hay que subir (drop_cm>0, bala baja), negativos cuando bala alta
+    const clicks=d>0?Math.round((p.drop_cm>=0?1:-1)*a1/clickV):0;
+    return{d,p:{...p,ek},a1,a2,clicks,isMrad};
+  });
+
+  renderTable(lastRows,zd);
+  renderChart(lastRows,isMrad);
+  calcZero(); // update zeroing tool with new ballistics
+}
+
+function renderTable(rows,zd){
+  const maxEk=Math.max(...rows.map(r=>r.p.ek),1);
+  const tb=g('tbody');tb.innerHTML='';
+  rows.forEach(({d,p,a1,a2,clicks})=>{
+    const isZ=d===zd;
+    const bw=Math.max(2,Math.round(p.ek/maxEk*46));
+    const tr=document.createElement('tr');
+    if(isZ)tr.className='zrow';
+    // Caída: positivo = bala bajo LOS (necesita corrección UP), negativo = bala sobre LOS
+    const dropStr=d===0?'—':(p.drop_cm>=0?'+':'')+p.drop_cm.toFixed(1);
+    // Ajuste: mismo signo que drop (+ = subir turret)
+    const adjSign=p.drop_cm>=0?'+':'-';
+    const a1Str=d===0?'—':adjSign+a1.toFixed(2);
+    const a2Str=d===0?'—':adjSign+a2.toFixed(2);
+    const clicStr=d===0?'—':(clicks>=0?'+':'')+clicks;
+    tr.innerHTML=`<td>${d} m${isZ?' ✦':''}</td>
+      <td>${Math.round(p.vel)}</td>
+      <td>${Math.round(p.ek)}<span style="display:inline-block;height:4px;width:${bw}px;border-radius:2px;background:var(--bl);opacity:.4;vertical-align:middle;margin-left:5px"></span></td>
+      <td>${dropStr}</td>
+      <td>${a1Str}</td>
+      <td>${a2Str}</td>
+      <td>${clicStr}</td>
+      <td>${p.drift===0?'—':(p.drift>=0?'+':'')+p.drift.toFixed(1)+' cm'}</td>
+      <td>${p.tof.toFixed(3)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function renderChart(rows,isMrad){
+  const isDk=matchMedia('(prefers-color-scheme:dark)').matches;
+  const labels=rows.map(r=>r.d+'m');
+  const drops=rows.map(r=>+r.p.drop_cm.toFixed(1));
+  const adjs=rows.map(r=>+r.a1.toFixed(2));
+  const drifts=rows.map(r=>+r.p.drift.toFixed(1));
+  const gc=isDk?'rgba(255,255,255,.07)':'rgba(0,0,0,.06)';
+  const tc2=isDk?'#5a5852':'#9c9a94';
+  const bl=isDk?'#5b9fe8':'#1a5fa8',or=isDk?'#e87a50':'#c44a1a',gr=isDk?'#4dc48a':'#1a7a50';
+  if(tChart){tChart.destroy();tChart=null;}
+  tChart=new Chart(g('tChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Caída cm',data:drops,borderColor:bl,backgroundColor:bl+'18',tension:0.3,pointRadius:2,yAxisID:'y'},
+      {label:'Corrección',data:adjs,borderColor:or,backgroundColor:or+'10',tension:0.3,pointRadius:2,yAxisID:'y2',borderDash:[5,3]},
+      {label:'Deriva cm',data:drifts,borderColor:gr,backgroundColor:gr+'10',tension:0.3,pointRadius:2,yAxisID:'y',borderDash:[2,5]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:gc},ticks:{color:tc2,font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:18}},
+        y:{grid:{color:gc},ticks:{color:bl,font:{size:10}},position:'left',title:{display:true,text:'cm',color:tc2,font:{size:10}}},
+        y2:{grid:{drawOnChartArea:false},ticks:{color:or,font:{size:10}},position:'right',title:{display:true,text:isMrad?'MRAD':'MOA',color:tc2,font:{size:10}}},
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// WIND
+// ═══════════════════════════════════════════════════════════════
+function renderWind(){
+  const load=currentLoad();if(!load)return;
+  const sh=getSH(),alt=+g('altS').value,tc=+g('tempS').value,hum=+g('humS').value;
+  const rhoR=airRho(alt,tc,hum);
+  const bc=load.bcG1; // Motor siempre usa BC G1; la tabla dragC está calibrada para G1
+  const cal=g('calS').value;
+  const winds=[5,10,15,20,25,30,40];
+  const dists=cal==='17hmr'?[50,75,100,125,150,175,200]:[100,150,200,250,300,350,400,500,600,700,800];
+  function cc(v){const a=Math.abs(v);return a<5?'wc1':a<15?'wc2':a<30?'wc3':'wc4';}
+  let html='<table class="wt"><thead><tr><th>Dist. \\ Viento</th>';
+  winds.forEach(w=>html+=`<th>${w} km/h</th>`);
+  html+='</tr></thead><tbody>';
+  dists.forEach(d=>{
+    html+=`<tr><td class="rh">${d} m</td>`;
+    winds.forEach(w=>{
+      const pts=siacci(bc,load.v0,sh,100,rhoR,1.0,w/3.6,1.0,[d]);
+      const drift=pts?.[d]?.drift;
+      const cls=drift!=null?cc(drift):'';
+      html+=`<td class="${cls}">${drift!=null?(drift>=0?'+':'')+drift.toFixed(1)+' cm':'—'}</td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  g('windMx').innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MPBR
+// ═══════════════════════════════════════════════════════════════
+function calcMPBR(){
+  const load=currentLoad();if(!load)return;
+  const sh=getSH(),alt=+g('altS').value,tc=+g('tempS').value,hum=+g('humS').value;
+  const rhoR=airRho(alt,tc,hum);
+  const bc=load.bcG1; // Motor siempre usa BC G1; la tabla dragC está calibrada para G1
+  const vital=+g('vrS').value,mpbrZd=+g('mzS').value;
+  const testD=[];for(let d=0;d<=900;d+=10)testD.push(d);
+  const pts=siacci(bc,load.v0,sh,mpbrZd,rhoR,1.0,0,1.0,testD);
+  if(!pts)return;
+  let maxD=0,peakPath=-999,velAtMax=load.v0;
+  testD.forEach(d=>{
+    const p=pts[d];if(!p)return;
+    if(p.pathCm>peakPath)peakPath=p.pathCm;
+    if(Math.abs(p.pathCm)<=vital){maxD=d;velAtMax=p.vel;}
+    if(d>50&&p.pathCm<-vital)return;
+  });
+  g('mpbr_d').textContent=maxD;
+  g('mpbr_p').textContent=(peakPath>=0?'+':'')+peakPath.toFixed(1);
+  g('mpbr_z').textContent=mpbrZd;
+  g('mpbr_v').textContent=Math.round(velAtMax);
+  g('mpbrR').textContent=vital;
+  const pct=Math.min(100,Math.round(maxD/9));
+  g('mpbrF').style.width=pct+'%';
+  g('mpbrF').style.background=maxD>400?'var(--gr)':maxD>250?'var(--or)':'var(--re)';
+  g('mpbrL').textContent=maxD+' m';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ZEROING TOOL — con distancia de prueba vs. cero objetivo
+// ═══════════════════════════════════════════════════════════════
+function calcZero(){
+  const targetDist=+g('zt_target').value||100;
+  const testDist=+g('zt_test').value||100;
+  const vertCm=+g('zt_v').value||0;
+  const horizCm=+g('zt_h').value||0;
+  const clickSel=g('zt_click').value;
+  const[unit,val]=clickSel.split('_');
+  const clickV=parseFloat(val);
+  const isMrad=unit==='mrad';
+
+  // cm per click at TEST distance (not target)
+  const cmPerClick=isMrad?testDist*clickV/10:testDist*clickV*2.908/100;
+
+  // Calcular dónde impactará a la distancia de prueba si el cero es el objetivo
+  // Usando las balísticas actuales
+  const load=currentLoad();
+  let expectedCm=0;
+  if(load&&targetDist!==testDist){
+    const sh=getSH();
+    const alt=+g('altS').value,tc=+g('tempS').value,hum=+g('humS').value;
+    const rhoR=airRho(alt,tc,hum);
+    const bc=load.bcG1; // Motor siempre usa BC G1; la tabla dragC está calibrada para G1
+    // Simular con cero en targetDist
+    const pts=siacci(bc,load.v0,sh,targetDist,rhoR,1.0,0,1.0,[testDist,targetDist]);
+    if(pts&&pts[testDist]){
+      // pathCm positivo = arriba de la LOS, negativo = debajo
+      expectedCm=pts[testDist].pathCm;
+    }
+  }
+
+  g('zt_test_ref').textContent=testDist;
+  g('zt_target_ref').textContent=targetDist;
+
+  const expAbs=Math.abs(expectedCm).toFixed(1);
+  const expDir=expectedCm>0?' (arriba del punto de mira)':expectedCm<0?' (abajo del punto de mira)':'';
+  g('zt_expected_v').textContent=(expectedCm>=0?'+':'')+expectedCm.toFixed(1)+' cm';
+  g('zt_expected_dir').textContent=expDir;
+
+  // El impacto real observado. La corrección necesaria para llegar al punto de mira
+  // a la distancia de prueba, teniendo en cuenta que a esa distancia el cero ideal
+  // daría expectedCm de impacto.
+  // Error real = impacto observado - impacto esperado
+  const realErrV=vertCm-expectedCm; // si impacta donde esperamos, error=0
+  const realErrH=horizCm; // deriva no tiene impacto esperado (sin viento)
+
+  // Corrección = opuesto al error real
+  const elevCorr=-realErrV;
+  const horizCorr=-realErrH;
+  const elevClicks=Math.round(elevCorr/cmPerClick);
+  const horizClicks=Math.round(horizCorr/cmPerClick);
+  const elevAng=(isMrad?Math.abs(elevCorr/(testDist/10)):Math.abs(elevCorr*100/(testDist*2.908))).toFixed(2);
+  const horizAng=(isMrad?Math.abs(horizCorr/(testDist/10)):Math.abs(horizCorr*100/(testDist*2.908))).toFixed(2);
+  const unitLbl=isMrad?'MRAD':'MOA';
+
+  g('zt_ev').textContent=elevAng;g('zt_eu').textContent=unitLbl;
+  g('zt_hv').textContent=horizAng;g('zt_hu').textContent=unitLbl;
+
+  function dir(corr,u,d,cu,cd){if(corr===0)return['',''];return corr>0?[u,cu]:[d,cd];}
+  const[eTxt,eCls]=dir(elevCorr,'SUBIR (U)','BAJAR (D)','bup','bdn');
+  const[hTxt,hCls]=dir(horizCorr,'DERECHA (R)','IZQUIERDA (L)','brt','blf');
+
+  g('zt_ed').textContent=realErrV!==0?eTxt:'';g('zt_ed').className='badge '+(realErrV!==0?eCls:'');
+  g('zt_hd').textContent=realErrH!==0?hTxt:'';g('zt_hd').className='badge '+(realErrH!==0?hCls:'');
+  g('zt_ec').textContent=Math.abs(elevClicks);g('zt_ecd').textContent=realErrV!==0?eTxt:'';g('zt_ecd').className='badge '+(realErrV!==0?eCls:'');
+  g('zt_hc').textContent=Math.abs(horizClicks);g('zt_hcd').textContent=realErrH!==0?hTxt:'';g('zt_hcd').className='badge '+(realErrH!==0?hCls:'');
+  g('zt_cm').textContent=cmPerClick.toFixed(2);
+  g('zt_tot').textContent=Math.sqrt(vertCm*vertCm+horizCm*horizCm).toFixed(1);
+
+  // Dibujar diana
+  const maxErr=Math.max(12,Math.ceil(Math.max(Math.abs(vertCm),Math.abs(horizCm),Math.abs(expectedCm))/10+2)*10);
+  g('scaleL').textContent='±'+maxErr+' cm por división';
+  const scale=88/maxErr;
+  const px=horizCm*scale,py=-vertCm*scale;
+  const hasMiss=vertCm!==0||horizCm!==0;
+
+  const dot=g('impDot');
+  if(hasMiss){
+    dot.setAttribute('cx',px.toFixed(1));dot.setAttribute('cy',py.toFixed(1));dot.setAttribute('r','8');
+    // Cruz en el impacto
+    g('crossH').setAttribute('x1',(px-12).toFixed(1));g('crossH').setAttribute('y1',py.toFixed(1));
+    g('crossH').setAttribute('x2',(px+12).toFixed(1));g('crossH').setAttribute('y2',py.toFixed(1));
+    g('crossV').setAttribute('x1',px.toFixed(1));g('crossV').setAttribute('y1',(py-12).toFixed(1));
+    g('crossV').setAttribute('x2',px.toFixed(1));g('crossV').setAttribute('y2',(py+12).toFixed(1));
+    // Flecha desde impacto hacia centro
+    const len=Math.sqrt(px*px+py*py);
+    const stopFrac=len>15?(len-12)/len:0;
+    g('corrArrow').setAttribute('x1',px.toFixed(1));g('corrArrow').setAttribute('y1',py.toFixed(1));
+    g('corrArrow').setAttribute('x2',(px*stopFrac*0.05).toFixed(1));g('corrArrow').setAttribute('y2',(py*stopFrac*0.05).toFixed(1));
+    g('corrArrow').setAttribute('opacity','1');
+  } else {
+    dot.setAttribute('r','0');
+    g('crossH').setAttribute('x1','0');g('crossH').setAttribute('y1','0');g('crossH').setAttribute('x2','0');g('crossH').setAttribute('y2','0');
+    g('crossV').setAttribute('x1','0');g('crossV').setAttribute('y1','0');g('crossV').setAttribute('x2','0');g('crossV').setAttribute('y2','0');
+    g('corrArrow').setAttribute('opacity','0');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('select').forEach(el=>{
+  if(!['calS','brandS','loadS','zt_click','retS'].includes(el.id))
+    el.addEventListener('change',calc);
+});
+loadPreset(0);
+</script>
+</body>
+</html>
